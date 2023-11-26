@@ -1,9 +1,9 @@
 version: '3'
 services:
   microservice-1:
-    build: ./microservice-1
+    build: ./app_usuarios
     ports:
-      - "3001:3001"
+      - "8080:8080"
   microservice-2:
     build: ./microservice-2
     ports:

@@ -1,5 +1,5 @@
 {
-  "name": "juezservice",
+  "name": "app_usuarios",
   "version": "1.0.0",
   "description": "This is the first microservice of our application.",
   "main": "index.js",
