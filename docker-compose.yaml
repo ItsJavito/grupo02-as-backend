@@ -20,3 +20,35 @@ services:
     build: ./microservice-5
     ports:
       - "3005:3005"
+
+  kong:
+    image: kong:latest
+    container_name: kong
+    environment:
+      KONG_DATABASE: "postgres"
+      KONG_PG_HOST: "postgres"
+      KONG_PG_USER: "kong"
+      KONG_PG_PASSWORD: "kong"
+      KONG_PG_DATABASE: "kong"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    depends_on:
+      - postgres
+    networks:
+      - kong-net
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: "kong"
+      POSTGRES_USER: "kong"
+      POSTGRES_PASSWORD: "kong"
+    networks:
+      - kong-net
+
+networks:
+  kong-net:
+    driver: bridge
+
