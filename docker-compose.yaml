@@ -1,0 +1,22 @@
+version: '3'
+services:
+  microservice-1:
+    build: ./microservice-1
+    ports:
+      - "3001:3001"
+  microservice-2:
+    build: ./microservice-2
+    ports:
+      - "3002:3002"
+  microservice-3:
+    build: ./microservice-3
+    ports:
+      - "3003:3003"
+  microservice-4:
+    build: ./microservice-4
+    ports:
+      - "3004:3004"
+  microservice-5:
+    build: ./microservice-5
+    ports:
+      - "3005:3005"
