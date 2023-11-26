@@ -4,6 +4,9 @@ FROM node:14
 # Set the working directory in the container to /app
 WORKDIR /app
 
+# Add a label to the image
+LABEL name="app_usuarios"
+
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
@@ -14,6 +17,6 @@ RUN npm install
 COPY . .
 
 # Expose port 3000
-EXPOSE 3001
+EXPOSE 8080
 # Start the app
 CMD [ "npm", "start" ]
