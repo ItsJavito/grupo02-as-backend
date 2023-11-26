@@ -1,7 +1,7 @@
 // Import necessary modules
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3005;
+const port = 3005;
 
 // Define routes
 app.get('/', (req, res) => {
