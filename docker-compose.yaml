@@ -98,14 +98,14 @@ services:
       DB_URI: ${DB_URI}
       SECRET: ${SECRET}
       PORT: ${PORT_CONCURSO}
-      
-
+    
   setup-routes:
     image: curlimages/curl:7.78.0
-    volumes:
-      - ./scripts/setup-routes.sh:/setup-routes.sh
-    command: /setup-routes.sh
-    depends_on:
-      - kong
     networks:
       - kong-net
+    volumes:
+      - ./scripts/setup-routes.sh:/setup-routes.sh
+    command: 
+      /setup-routes.sh
+    depends_on:
+      - kong
