@@ -36,7 +36,7 @@ exports.insert_problems = async(req, res) =>{
 
 exports.get_problem = async(req, res) =>{
     try{
-        const problem = await Problem.findOne({id: req.params.id, user_created: req.userId});
+        const problem = await Problem.findOne({id: req.params.id});
         return res.status(200).send({problem});
     }catch(err){
         return res.status(500).send({message: err.message});
