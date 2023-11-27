@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 exports.getUser = async (req, res) => {
   try{
-    let user = await User.findOne({username: req.body.username});
+    let user = await User.findOne({username: req.userId});
     if(!user){
       return res.status(400).send({message: "The user does not exist"});
     }

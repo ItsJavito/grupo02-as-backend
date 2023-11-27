@@ -16,7 +16,7 @@ module.exports = function(app) {
         ],
         controller.signup
     );
-    app.post("/auth/signin", controller.signin);
+    app.post("/auth/login", controller.signin);
     app.post("/auth/signout", controller.signout);
     app.get("/auth/validate", controller.validate);
 }
