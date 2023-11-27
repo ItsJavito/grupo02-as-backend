@@ -31,7 +31,6 @@ exports.signin = async (req, res) => {
         return res.status(200).send({
             username: user.username,
             email: user.email,
-            accessToken: token
         });
     }catch(err){
         return res.status(500).send({message: err.message});

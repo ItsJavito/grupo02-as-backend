@@ -19,10 +19,12 @@ exports.insert_problems = async(req, res) =>{
         }
         const id = uuidv4();
         const{titulo, descripcion, casos_prueba} = req.body;
+        const user_created = req.userId;
         const problem = new Problem({
             id,
             titulo,
             descripcion,
+            user_created,
             casos_prueba
         });
         await problem.save();
@@ -34,7 +36,7 @@ exports.insert_problems = async(req, res) =>{
 
 exports.get_problem = async(req, res) =>{
     try{
-        const problem = await Problem.findOne({id: req.params.id});
+        const problem = await Problem.findOne({id: req.params.id, user_created: req.userId});
         return res.status(200).send({problem});
     }catch(err){
         return res.status(500).send({message: err.message});
@@ -43,7 +45,7 @@ exports.get_problem = async(req, res) =>{
 
 exports.get_problems = async(req, res) =>{
     try{
-        const problems = await Problem.find();
+        const problems = await Problem.find({user_created: req.userId});
         return res.status(200).send({problems});
     }catch(err){
         return res.status(500).send({message: err.message});
@@ -58,7 +60,7 @@ exports.update_problem = async(req, res) =>{
             return res.status(400).send({ message: error.details[0].message });
         }
 
-        let problem = await Problem.findOneAndUpdate({id: req.params.id}, req.body);
+        let problem = await Problem.findOneAndUpdate({id: req.params.id, user_created: req.userId}, req.body);
         return res.status(200).send({message: "Problem updated successfully" , problem: req.body});
     }catch(err){
         return res.status(500).send({message: err.message});
@@ -67,7 +69,7 @@ exports.update_problem = async(req, res) =>{
 
 exports.delete_problems = async(req, res) =>{
     try{
-        await Problem.findOneAndDelete({id: req.params.id});
+        await Problem.findOneAndDelete({id: req.params.id, user_created: req.userId});
         return res.status(200).send({message: "Problem deleted successfully" , id: req.params.id});
     }catch(err){
         return res.status(500).send({message: err.message});
