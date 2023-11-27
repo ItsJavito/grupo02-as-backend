@@ -14,10 +14,10 @@ module.exports = function(app) {
 
     //! endpoints
 
-    app.post("/problemas",controller.insert_problems);
-    app.get("/problemas", controller.get_problems);
+    app.post("/",controller.insert_problems);
+    app.get("/", controller.get_problems);
     // añadir parmetro de id
-    app.get("/problemas/:id", controller.get_problem);
-    app.delete("/problemas/:id", controller.delete_problems);
-    app.put("/problemas/:id", controller.update_problem);
+    app.get("/:id", controller.get_problem);
+    app.delete("/:id", controller.delete_problems);
+    app.put("/:id", controller.update_problem);
 }

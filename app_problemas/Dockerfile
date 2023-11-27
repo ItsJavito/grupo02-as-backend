@@ -1,8 +1,11 @@
 # Use an official Node.js runtime as the base image
-FROM node:14
+FROM node:15
 
 # Set the working directory in the container to /app
 WORKDIR /app
+
+# Add a label to the image
+LABEL name="app_problemas"
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
@@ -14,7 +17,6 @@ RUN npm install
 COPY . .
 
 # Expose port 3000
-EXPOSE 3004
-
+EXPOSE 8081
 # Start the app
-CMD [ "npm", "start" ]
+CMD [ "npm", "run" , "start" ]

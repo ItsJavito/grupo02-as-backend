@@ -1,22 +1,111 @@
 version: '3'
+
+networks:
+  kong-net:
+    driver: bridge
+
 services:
-  microservice-1:
+  kong-database:
+    image: postgres:9.6
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kong
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kong-migration:
+    image: kong:latest
+    command: "kong migrations bootstrap"
+    networks:
+      - kong-net
+    restart: on-failure
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_DATABASE: kong
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kong}
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+
+  kong:
+    image: kong:latest
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_DATABASE: kong
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    depends_on:
+      - kong-migration
+      - kong-database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://kong:8001"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+    ports:
+      - "8001:8001"
+      - "8000:8000"
+
+  microservice-usuarios:
     build: ./app_usuarios
     ports:
       - "8080:8080"
-  microservice-2:
-    build: ./microservice-2
+    networks:
+      - kong-net
+    environment:
+      DB_URI: ${DB_URI}
+      SECRET: ${SECRET}
+      PORT: ${PORT_USUARIOS}
+      
+  microservice-problemas:
+    build: ./app_problemas
     ports:
-      - "3002:3002"
-  microservice-3:
-    build: ./microservice-3
+      - "8081:8081"
+    networks:
+      - kong-net
+    environment:
+      DB_URI: ${DB_URI}
+      SECRET: ${SECRET}
+      PORT: ${PORT_PROBLEMAS}
+      
+
+  microservice-concurso:
+    build: ./app_concurso
     ports:
-      - "3003:3003"
-  microservice-4:
-    build: ./microservice-4
-    ports:
-      - "3004:3004"
-  microservice-5:
-    build: ./microservice-5
-    ports:
-      - "3005:3005"
+      - "8082:8082"
+    networks:
+      - kong-net
+    environment:
+      DB_URI: ${DB_URI}
+      SECRET: ${SECRET}
+      PORT: ${PORT_CONCURSO}
+      
+
+  setup-routes:
+    image: curlimages/curl:7.78.0
+    volumes:
+      - ./scripts/setup-routes.sh:/setup-routes.sh
+    command: /setup-routes.sh
+    depends_on:
+      - kong
+    networks:
+      - kong-net

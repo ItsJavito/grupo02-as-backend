@@ -10,7 +10,7 @@ module.exports = function(app) {
         next();
     });
     app.get(
-        "/user/getuser",
+        "/getuser",
         [authJwt.verifyToken],
         controller.getUser
     );

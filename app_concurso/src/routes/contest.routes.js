@@ -14,13 +14,13 @@ module.exports = function(app) {
 
     //! endpoints
 
-    app.post("/concurso",controller.create_contest);
-    app.get("/concurso/:id", controller.get_contest);
-    app.get("/concurso/all", controller.get_contests);
-    app.get("/concurso", controller.get_participant_contests);
-    app.put("/concurso/:id", controller.update_contest);
-    app.delete("/concurso/:id", controller.delete_contest);
-    app.post("/concurso/participant/:id", controller.add_participant);
-    app.delete("/concurso/participant/:id", controller.delete_participant);
-    app.get("/concurso/problem/:id", controller.add_problem);
+    app.post("/",controller.create_contest);
+    app.get("/:id", controller.get_contest);
+    app.get("/all", controller.get_contests);
+    app.get("/", controller.get_participant_contests);
+    app.put("/:id", controller.update_contest);
+    app.delete("/:id", controller.delete_contest);
+    app.post("/participant/:id", controller.add_participant);
+    app.delete("/participant/:id", controller.delete_participant);
+    app.get("/problem/:id", controller.add_problem);
 }
