@@ -21,10 +21,10 @@ app.use(
   })
 );
 
-require('./routes/contest.routes')(app);
+require('./routes/judge.routes')(app);
 
 app.get("/", (req, res) => {
-    res.json({ message: "Servicio de concursos." });
+    res.json({ message: "Servicio de juez." });
 })
 
 module.exports = app;
