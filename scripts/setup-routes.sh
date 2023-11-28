@@ -33,3 +33,24 @@ curl -i -X POST \
 curl -i -X POST \
   --url http://kong:8001/services/microservice-concurso/routes \
   --data 'paths[]=/concurso'
+
+# Add rate limiting for microservice-usuarios
+curl -i -X POST \
+  --url http://kong:8001/services/microservice-usuarios/plugins \
+  --data 'name=rate-limiting' \
+  --data 'config.minute=100' \
+  --data 'config.policy=local'
+
+# Add rate limiting for microservice-problemas
+curl -i -X POST \
+  --url http://kong:8001/services/microservice-problemas/plugins \
+  --data 'name=rate-limiting' \
+  --data 'config.minute=100' \
+  --data 'config.policy=local'
+
+# Add rate limiting for microservice-concurso
+curl -i -X POST \
+  --url http://kong:8001/services/microservice-concurso/plugins \
+  --data 'name=rate-limiting' \
+  --data 'config.minute=100' \
+  --data 'config.policy=local'
