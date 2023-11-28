@@ -86,8 +86,7 @@ services:
       DB_URI: ${DB_URI}
       SECRET: ${SECRET}
       PORT: ${PORT_PROBLEMAS}
-      
-
+    
   microservice-concurso:
     build: ./app_concurso
     ports:
@@ -98,7 +97,29 @@ services:
       DB_URI: ${DB_URI}
       SECRET: ${SECRET}
       PORT: ${PORT_CONCURSO}
-    
+  
+  microservice-juez:
+    build: ./app_juez
+    ports:
+      - "8083:8083"
+    networks:
+      - kong-net
+    environment:
+      DB_URI: ${DB_URI}
+      SECRET: ${SECRET}
+      PORT: ${PORT_JUEZ}
+
+  microservice-juez2:
+    build: ./app_juez2
+    ports:
+      - "8084:8084"
+    networks:
+      - kong-net
+    environment:
+      DB_URI: ${DB_URI}
+      SECRET: ${SECRET}
+      PORT: ${PORT_JUEZ2}
+      
   setup-routes:
     image: curlimages/curl:7.78.0
     networks:
