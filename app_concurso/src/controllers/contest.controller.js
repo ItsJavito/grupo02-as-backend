@@ -153,7 +153,7 @@ exports.add_problem = async (req, res) => {
     try {
         const contest = await Contest.findOneAndUpdate(
             { id: req.params.id}, 
-            { $push: { problemas: req.body.problema } }, 
+            { $push: { problemas: req.body } }, 
             { new: true });
         res.status(200).json(contest);
     } catch (err) {
