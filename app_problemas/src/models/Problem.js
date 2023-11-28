@@ -8,7 +8,7 @@ const TestCaseSchema = new mongoose.Schema({
 const ProblemSchema = new mongoose.Schema({
   id: { type:String , required: true, unique: true },
   titulo: { type: String, required: true, unique: false },
-  descripcion : { type: String, required: true, unique: true },
+  descripcion : { type: String, required: true, unique: false },
   user_created: { type: String, required: true, unique: false }, 
   casos_prueba: [TestCaseSchema]
 });

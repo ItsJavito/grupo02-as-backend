@@ -5,7 +5,10 @@ const config = require("./config/config");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -17,7 +20,7 @@ app.use(
   cookieSession({
     name: "back-session",
     secret: config.SECRET, // should use as secret environment variable
-    httpOnly: true,
+    httpOnly: false,
   })
 );
 
@@ -25,7 +28,7 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
+    res.json({ message: "Servicio de usuarios." });
 })
 
 module.exports = app;

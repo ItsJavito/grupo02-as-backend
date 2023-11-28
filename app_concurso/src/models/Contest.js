@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const ProblemSchema = new mongoose.Schema({
   id: { type: String, required: true },
-  Titulo: { type: String, required: true }
+  titulo: { type: String, required: true }
 });
 
 const ContestSchema = new mongoose.Schema({
   id: { type:String , required: true, unique: true },
   titulo: { type: String, required: true, unique: false },
-  descripcion : { type: String, required: true, unique: true },
+  descripcion : { type: String, required: true, unique: false },
   fh_inicio: { type: Date, required: true, unique: false },
   fh_fin: { type: Date, required: true, unique: false },
   participant_limit:{ type: Number, required: true, unique: false },

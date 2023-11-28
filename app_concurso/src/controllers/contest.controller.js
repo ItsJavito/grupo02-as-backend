@@ -7,11 +7,17 @@ const contestSchema = Joi.object({
     descripcion: Joi.string().required(),
     fh_inicio: Joi.date().required(),
     fh_fin: Joi.date().required(),
+    participant_limit: Joi.number().required(),
     problemas: Joi.array().items(Joi.object({
       id: Joi.string().required(),
       titulo: Joi.string().required(),
     })),
     participantes: Joi.array().items(Joi.string())
+});
+
+const problemSchema = Joi.object({
+    id: Joi.string().required(),
+    titulo: Joi.string().required(),
 });
 
 //* crear concurso
@@ -21,7 +27,7 @@ exports.create_contest = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { titulo, descripcion, fh_inicio, fh_fin, problemas, participantes } = req.body;
+    const { titulo, descripcion, fh_inicio, fh_fin, problemas, participantes, participant_limit } = req.body;
     const user_created = req.userId;
 
     const contest = new Contest({
@@ -32,7 +38,8 @@ exports.create_contest = async (req, res) => {
         fh_fin,
         user_created,
         problemas,
-        participantes
+        participantes,
+        participant_limit
     });
 
     try {
@@ -54,15 +61,15 @@ exports.get_contest = async (req, res) => {
 }
 
 //* concursos creados por el usuario
-exports.get_contests = async (req, res) => {
+exports.fetch_contests = async (req, res) => {
     try {
-        const contests = await Contest.find({ user_created: req.userId });
-        res.status(200).json(contests);
+
+        const response = await Contest.find({ user_created: req.userId });
+        res.status(200).json(response);
     } catch (err) {
-        res.status(404).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 }
-
 // * Get contests where user is participant
 exports.get_participant_contests = async (req, res) => {
     try {
@@ -80,7 +87,7 @@ exports.update_contest = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { titulo, descripcion, fh_inicio, fh_fin, problemas, participantes } = req.body;
+    const { titulo, descripcion, fh_inicio, fh_fin, problemas, participantes, participant_limit } = req.body;
     const user_created = req.userId;
 
     const contest = {
@@ -90,7 +97,8 @@ exports.update_contest = async (req, res) => {
         fh_fin,
         user_created,
         problemas,
-        participantes
+        participantes,
+        participant_limit
     };
 
     try {
@@ -138,6 +146,10 @@ exports.delete_participant = async (req, res) => {
 
 //* agregar preguntas de concurso
 exports.add_problem = async (req, res) => {
+    const {error} = problemSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
     try {
         const contest = await Contest.findOneAndUpdate(
             { id: req.params.id}, 
